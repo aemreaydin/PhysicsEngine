@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "cShader.h"
 #include "cModel.h"
+#include "cGameObject.h"
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -16,8 +17,9 @@
 
 cGLCalls* GLCalls;
 cShader * Shader;
-cModel* Nanosuit;
-cModel* Pineapple;
+cGameObject * Nanosuit, * SanFran;
+
+std::vector< cGameObject * > GOVec;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -50,8 +52,13 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	Shader = new cShader("assets/shaders/simpleVertex.glsl", "assets/shaders/simpleFragment.glsl");
-	Nanosuit = new cModel("assets/models/nanosuit.obj");
-	//Pineapple = new cModel("assets/Pineapple/ananas.fbx");
+	Nanosuit = new cGameObject("Nanosuit", "assets/models/nanosuit/nanosuit.obj", glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.1), glm::vec3(0.0f));
+	SanFran = new cGameObject("Tree", "assets/models/sanfrancisco/houseSF.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(1.0f), glm::vec3(90.0f, 90.0f, 0.0f));
+
+
+	GOVec.push_back(Nanosuit);
+	GOVec.push_back(SanFran);
+
 
 	while (!glfwWindowShouldClose(GLCalls->GetWindow()))
 	{
@@ -71,14 +78,17 @@ int main()
 		Shader->SetMatrix4("projection", projection, true);
 		Shader->SetMatrix4("view", view, true);
 
-		glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-		//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-		//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.1f));
-		Shader->SetMatrix4("model", model, true);
-		Nanosuit->Draw(*Shader);
-		//Pineapple->Draw(*Shader);
+		for (int i = 0; i < GOVec.size(); i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, GOVec[i]->Position);
+			model = glm::rotate(model, glm::radians(GOVec[i]->OrientationEuler.x), glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(GOVec[i]->OrientationEuler.y), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(GOVec[i]->OrientationEuler.z), glm::vec3(0.0f, 0.0f, 1.0f));
+			model = glm::scale(model, GOVec[i]->Scale);
+			Shader->SetMatrix4("model", model, true);
+			GOVec[i]->Draw(*Shader);
+		}
 
 		glfwPollEvents();
 		glfwSwapBuffers(GLCalls->GetWindow());
@@ -104,7 +114,27 @@ void processInput(GLFWwindow *window)
 
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-
+		Nanosuit->OrientationEuler.z += 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
+	{
+		Nanosuit->OrientationEuler.z -= 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
+	{
+		Nanosuit->OrientationEuler.x += 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+	{
+		Nanosuit->OrientationEuler.x -= 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
+	{
+		Nanosuit->OrientationEuler.y += 1.0f;
+	}
+	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+	{
+		Nanosuit->OrientationEuler.y -= 1.0f;
 	}
 }
 
