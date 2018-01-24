@@ -6,6 +6,13 @@
 #include "cShader.h"
 #include "cModel.h"
 #include "cGameObject.h"
+#include "cLightManager.h"
+
+
+#define _SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable:4996)
+#include <gtest\gtest.h>
 
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
@@ -16,8 +23,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 cGLCalls* GLCalls;
-cShader * Shader;
+cShader * Shader, * LampShader;
 cGameObject * Nanosuit, * SanFran;
+cLightManager * LightManager;
 
 std::vector< cGameObject * > GOVec;
 
@@ -29,7 +37,7 @@ void processInput(GLFWwindow *window);
 const unsigned int width = 1600;
 const unsigned int height = 900;
 
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 10.0f, 10.0f));
 float lastX = width / 2.0f;
 float lastY = height / 2.0f;
 bool firstMouse = true;
@@ -37,13 +45,22 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-int main()
+TEST(TC_INIT, InitializeGLFW)
+{
+	ASSERT_TRUE(GLCalls->Initialize() == GL_TRUE);
+}
+TEST(TC_CREATE_WINDOW, CreateGLWindow)
+{
+	ASSERT_TRUE(GLCalls->CreateGLWindow() == GL_TRUE);
+}
+
+int main(int argc, char **argv)
 {
 	GLCalls = new cGLCalls(width, height, "AssimpImport");
-	if (!GLCalls->Initialize())
-		std::cout << "Can't Initialize." << std::endl;
-	if (!GLCalls->CreateGLWindow())
-		std::cout << "Can't Create Window." << std::endl;
+
+	::testing::InitGoogleTest(&argc, argv);
+	RUN_ALL_TESTS();	
+
 	glfwSetFramebufferSizeCallback(GLCalls->GetWindow(), framebuffer_size_callback);
 	glfwSetCursorPosCallback(GLCalls->GetWindow(), mouse_callback);
 	glfwSetScrollCallback(GLCalls->GetWindow(), scroll_callback);
@@ -52,12 +69,21 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	Shader = new cShader("assets/shaders/simpleVertex.glsl", "assets/shaders/simpleFragment.glsl");
-	Nanosuit = new cGameObject("Nanosuit", "assets/models/nanosuit/nanosuit.obj", glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.1), glm::vec3(0.0f));
+	LampShader = new cShader("assets/shaders/lampShader.glsl", "assets/shaders/lampFragment.glsl");
+
+	Nanosuit = new cGameObject("Nanosuit", "assets/models/nanosuit/nanosuit.obj", glm::vec3(7.0f, 0.0f, 0.0f), glm::vec3(0.5), glm::vec3(0.0f));	
 	SanFran = new cGameObject("Tree", "assets/models/sanfrancisco/houseSF.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(1.0f), glm::vec3(90.0f, 90.0f, 0.0f));
 
 
+	LightManager = new cLightManager();
+	LightManager->CreateLights();
+	LightManager->LoadLampsIntoShader(*LampShader);
+	
+	//LightManager->LoadLampsIntoShader(*Shader);
+
 	GOVec.push_back(Nanosuit);
-	GOVec.push_back(SanFran);
+	//GOVec.push_back(SanFran);
+
 
 
 	while (!glfwWindowShouldClose(GLCalls->GetWindow()))
@@ -66,17 +92,31 @@ int main()
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
+		LightManager->Lights[0].diffuse.x = sin(glfwGetTime() * 0.7f);
+		LightManager->Lights[0].diffuse.y = sin(glfwGetTime() * 0.3f);
+		LightManager->Lights[0].diffuse.z = sin(glfwGetTime() * 2.0f);
+
+		LightManager->Lights[0].specular.x = cos(glfwGetTime() * 0.5f);
+		LightManager->Lights[0].specular.y = cos(glfwGetTime() * 0.9f);
+		LightManager->Lights[0].specular.z = cos(glfwGetTime() * 2.0f);
+
 		processInput(GLCalls->GetWindow());
 
 		glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		Shader->Use();
+		LampShader->Use();
 
 		glm::mat4 projection = glm::perspective(glm::radians(camera.GetZoom()), (float)width / (float)height, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		Shader->SetMatrix4("projection", projection, true);
 		Shader->SetMatrix4("view", view, true);
+		Shader->SetVector3f("eyePos", camera.GetPosition());
+		LampShader->SetMatrix4("projection", projection, true);
+		LampShader->SetMatrix4("view", view, true);
+		LightManager->LoadLightsIntoShader(*Shader);
+
 
 		for (int i = 0; i < GOVec.size(); i++)
 		{
@@ -89,6 +129,16 @@ int main()
 			Shader->SetMatrix4("model", model, true);
 			GOVec[i]->Draw(*Shader);
 		}
+		for (int i = 0; i < LightManager->NumLights; i++)
+		{
+			glm::mat4 lightModel = glm::mat4(1.0f);
+			lightModel = glm::translate(lightModel, LightManager->Lights[i].position);
+			lightModel = glm::scale(lightModel, glm::vec3(0.2f));
+			Shader->SetMatrix4("lightModel", lightModel, true);
+		}
+		LightManager->DrawLightsIntoScene(*LampShader);
+
+		
 
 		glfwPollEvents();
 		glfwSwapBuffers(GLCalls->GetWindow());
@@ -114,28 +164,30 @@ void processInput(GLFWwindow *window)
 
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-		Nanosuit->OrientationEuler.z += 1.0f;
+		LightManager->Lights[0].position.x += 0.1f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 	{
-		Nanosuit->OrientationEuler.z -= 1.0f;
+		LightManager->Lights[0].position.x -= 0.1f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 	{
-		Nanosuit->OrientationEuler.x += 1.0f;
+		LightManager->Lights[0].position.z += 0.1f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 	{
-		Nanosuit->OrientationEuler.x -= 1.0f;
+		LightManager->Lights[0].position.z -= 0.1f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
 	{
-		Nanosuit->OrientationEuler.y += 1.0f;
+		LightManager->Lights[0].position.y += 0.1f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 	{
-		Nanosuit->OrientationEuler.y -= 1.0f;
+		LightManager->Lights[0].position.y -= 0.1f;
 	}
+
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes

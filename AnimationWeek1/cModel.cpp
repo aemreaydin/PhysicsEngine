@@ -107,10 +107,6 @@ cMesh cModel::processMesh(aiMesh * mesh, const aiScene * scene)
 	}
 
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	std::cout << material->GetTextureCount(aiTextureType_DIFFUSE) << std::endl;
-	std::cout << material->GetTextureCount(aiTextureType_SPECULAR) << std::endl;
-	std::cout << material->GetTextureCount(aiTextureType_HEIGHT) << std::endl;
-	std::cout << material->GetTextureCount(aiTextureType_AMBIENT) << std::endl;
 
 	std::vector<sTexture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
