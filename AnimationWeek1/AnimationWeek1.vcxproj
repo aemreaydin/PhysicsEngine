@@ -124,21 +124,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cGameObject.cpp" />
     <ClCompile Include="cGLCalls.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="cModel.cpp" />
     <ClCompile Include="cShader.cpp" />
-    <ClCompile Include="cSpriteRenderer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\glad.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="cGameObject.h" />
     <ClInclude Include="cGLCalls.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="cModel.h" />
     <ClInclude Include="cShader.h" />
-    <ClInclude Include="cSpriteRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

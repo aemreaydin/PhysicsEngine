@@ -30,10 +30,10 @@
     <ClCompile Include="cShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cSpriteRenderer.cpp">
+    <ClCompile Include="cModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cModel.cpp">
+    <ClCompile Include="cGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,13 +47,13 @@
     <ClInclude Include="cShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cSpriteRenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

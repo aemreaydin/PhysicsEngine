@@ -41,7 +41,6 @@ void cMesh::Draw(cShader shader)
 		else if (name == "texture_height")
 			number = std::to_string(heightNr++);
 
-		std::string x = name + number;
 		shader.SetInteger((name + number).c_str(), i, true);
 		glBindTexture(GL_TEXTURE_2D, this->VecTextures[i].ID);
 	}

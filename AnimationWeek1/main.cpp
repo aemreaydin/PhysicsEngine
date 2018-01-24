@@ -16,7 +16,8 @@
 
 cGLCalls* GLCalls;
 cShader * Shader;
-cModel* Model;
+cModel* Nanosuit;
+cModel* Pineapple;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -49,7 +50,8 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 
 	Shader = new cShader("assets/shaders/simpleVertex.glsl", "assets/shaders/simpleFragment.glsl");
-	Model = new cModel("assets/models/nanosuit.obj");
+	Nanosuit = new cModel("assets/models/nanosuit.obj");
+	//Pineapple = new cModel("assets/Pineapple/ananas.fbx");
 
 	while (!glfwWindowShouldClose(GLCalls->GetWindow()))
 	{
@@ -72,9 +74,11 @@ int main()
 		glm::mat4 model = glm::mat4(1.0f);
 		//model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
 		//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+		//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(0.1f));
 		Shader->SetMatrix4("model", model, true);
-		Model->Draw(*Shader);
+		Nanosuit->Draw(*Shader);
+		//Pineapple->Draw(*Shader);
 
 		glfwPollEvents();
 		glfwSwapBuffers(GLCalls->GetWindow());
@@ -97,6 +101,11 @@ void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+
+	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
+	{
+
+	}
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
