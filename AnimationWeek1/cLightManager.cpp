@@ -51,6 +51,11 @@ void cLightManager::CreateLights()
 		lightFile >> tempLight.specular.w;
 
 		lightFile >> temp;
+		lightFile >> tempLight.attenuation.x;
+		lightFile >> tempLight.attenuation.y;
+		lightFile >> tempLight.attenuation.z;
+
+		lightFile >> temp;
 		lightFile >> tempLight.position.x;
 		lightFile >> tempLight.position.y;
 		lightFile >> tempLight.position.z;
@@ -151,6 +156,7 @@ void cLightManager::LoadLightsIntoShader(cShader Shader)
 		Shader.SetVector4f("AmbientColor", this->Lights[i].ambient, true);
 		Shader.SetVector4f("DiffuseColor", this->Lights[i].diffuse, true);
 		Shader.SetVector4f("SpecularColor", this->Lights[i].specular, true);
+		Shader.SetVector3f("Attenuation", this->Lights[i].attenuation, true);
 		if (this->Lights[i].lightType == eLightType::DIRECTIONAL_LIGHT)
 			Shader.SetInteger("LightType", 0);
 		else if (this->Lights[i].lightType == eLightType::POINT_LIGHT)

@@ -9,6 +9,7 @@ in vec3 LightPosition;
 uniform vec4 AmbientColor;
 uniform vec4 DiffuseColor;
 uniform vec4 SpecularColor;
+uniform vec3 Attenuation;
 uniform int LightType;
 uniform vec3 eyePos;
 
@@ -38,6 +39,37 @@ void main()
 		float specularRatio = pow(max(dot(viewDir, reflectDir), 0.0), 64);
 		vec3 specularColor;
 		specularColor = specularRatio * specularStr * SpecularColor.xyz;
+		
+		vec3 lightColor = ambientColor + diffuseColor + specularColor;
+		//vec3 lightColor = ambientColor + diffuseColor; // + specularColor;
+		FragColor = vec4(lightColor, 1.0) * (texture(texture_diffuse1, TexCoords));
+										  //+ texture(texture_specular1, TexCoords));
+										  //+ texture(texture_normal1, TexCoords));
+	}
+	else if(LightType == 1)
+	{
+		float distance = length(LightPosition - ObjectPosition);
+		float attenuation = 1.0 / (Attenuation.x + Attenuation.y * distance + Attenuation.z * (distance * distance));
+	
+		float AmbientStr = 0.0;
+		vec3 ambientColor;
+		ambientColor = AmbientColor.xyz * AmbientStr;
+		ambientColor *= attenuation;
+		
+		vec3 normalizedNormal = normalize(Normal);
+		vec3 lightDir = normalize(LightPosition - ObjectPosition);
+		float diffuseRatio = max(dot(normalizedNormal, lightDir), 0.0);
+		vec3 diffuseColor;
+		diffuseColor = diffuseRatio * DiffuseColor.xyz;
+		diffuseColor *= attenuation;
+		
+		float specularStr = 0.9;
+		vec3 viewDir = normalize(eyePos - LightPosition);
+		vec3 reflectDir = reflect(-lightDir, normalizedNormal);
+		float specularRatio = pow(max(dot(viewDir, reflectDir), 0.0), 64);
+		vec3 specularColor;
+		specularColor = specularRatio * specularStr * SpecularColor.xyz;
+		specularColor *= attenuation;
 		
 		vec3 lightColor = ambientColor + diffuseColor + specularColor;
 		//vec3 lightColor = ambientColor + diffuseColor; // + specularColor;
