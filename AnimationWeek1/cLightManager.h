@@ -14,6 +14,32 @@
 
 class cShader;
 
+
+enum eLightType
+{
+	DIRECTIONAL_LIGHT,
+	POINT_LIGHT,
+	SPOT_LIGHT,	
+	UNKNOWN
+};
+
+struct sLight
+{
+	glm::vec4 ambient;
+	glm::vec4 diffuse;
+	glm::vec4 specular;
+	glm::vec3 position;
+	eLightType lightType;
+
+	sLight()
+	{
+		this->ambient = glm::vec4(1.0f);
+		this->diffuse = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		this->specular = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		this->position = glm::vec3(0.0f);
+		this->lightType = eLightType::UNKNOWN;
+	}
+};
 struct sLightVAO
 {
 	GLuint lightVAO;
@@ -26,29 +52,6 @@ struct sLightVAO
 	}
 };
 
-struct sLight
-{
-	glm::vec4 ambient;
-	glm::vec4 diffuse;
-	glm::vec4 specular;
-	glm::vec3 position;
-
-	sLight()
-	{
-		this->ambient = glm::vec4(1.0f);
-		this->diffuse = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-		this->specular = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-		this->position = glm::vec3(0.0f);
-	}
-};
-
-enum eLightType
-{
-	SPOT_LIGHT,
-	DIRECTIONAL_LIGHT,
-	POINT_LIGHT,
-	UNKNOWN
-};
 
 class cLightManager
 {

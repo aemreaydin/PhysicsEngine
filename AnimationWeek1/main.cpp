@@ -71,8 +71,8 @@ int main(int argc, char **argv)
 	Shader = new cShader("assets/shaders/simpleVertex.glsl", "assets/shaders/simpleFragment.glsl");
 	LampShader = new cShader("assets/shaders/lampShader.glsl", "assets/shaders/lampFragment.glsl");
 
-	Nanosuit = new cGameObject("Nanosuit", "assets/models/nanosuit/nanosuit.obj", glm::vec3(7.0f, 0.0f, 0.0f), glm::vec3(0.5), glm::vec3(0.0f));	
-	SanFran = new cGameObject("Tree", "assets/models/sanfrancisco/houseSF.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(1.0f), glm::vec3(90.0f, 90.0f, 0.0f));
+	Nanosuit = new cGameObject("Nanosuit", "assets/models/nanosuit/nanosuit.obj", glm::vec3(7.0f, 0.0f, 0.0f), glm::vec3(0.2), glm::vec3(0.0f));	
+	SanFran = new cGameObject("Tree", "assets/models/sanfrancisco/houseSF.obj", glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.5f), glm::vec3(90.0f, 90.0f, 0.0f));
 
 
 	LightManager = new cLightManager();
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	//LightManager->LoadLampsIntoShader(*Shader);
 
 	GOVec.push_back(Nanosuit);
-	//GOVec.push_back(SanFran);
+	GOVec.push_back(SanFran);
 
 
 
@@ -92,13 +92,6 @@ int main(int argc, char **argv)
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		LightManager->Lights[0].diffuse.x = sin(glfwGetTime() * 0.7f);
-		LightManager->Lights[0].diffuse.y = sin(glfwGetTime() * 0.3f);
-		LightManager->Lights[0].diffuse.z = sin(glfwGetTime() * 2.0f);
-
-		LightManager->Lights[0].specular.x = cos(glfwGetTime() * 0.5f);
-		LightManager->Lights[0].specular.y = cos(glfwGetTime() * 0.9f);
-		LightManager->Lights[0].specular.z = cos(glfwGetTime() * 2.0f);
 
 		processInput(GLCalls->GetWindow());
 

@@ -22,6 +22,17 @@ void cLightManager::CreateLights()
 	{
 		sLight tempLight;
 		lightFile >> temp;
+		lightFile >> temp;
+		if (temp == "DIRECTIONAL")
+			tempLight.lightType = eLightType::DIRECTIONAL_LIGHT;
+		else if (temp == "SPOT")
+			tempLight.lightType = eLightType::SPOT_LIGHT;
+		else if (temp == "POINT")
+			tempLight.lightType = eLightType::POINT_LIGHT;
+		else
+			tempLight.lightType = eLightType::UNKNOWN;
+
+		lightFile >> temp;
 		lightFile >> tempLight.ambient.x;
 		lightFile >> tempLight.ambient.y;
 		lightFile >> tempLight.ambient.z;
@@ -140,5 +151,11 @@ void cLightManager::LoadLightsIntoShader(cShader Shader)
 		Shader.SetVector4f("AmbientColor", this->Lights[i].ambient, true);
 		Shader.SetVector4f("DiffuseColor", this->Lights[i].diffuse, true);
 		Shader.SetVector4f("SpecularColor", this->Lights[i].specular, true);
+		if (this->Lights[i].lightType == eLightType::DIRECTIONAL_LIGHT)
+			Shader.SetInteger("LightType", 0);
+		else if (this->Lights[i].lightType == eLightType::POINT_LIGHT)
+			Shader.SetInteger("LightType", 1);
+		else if (this->Lights[i].lightType == eLightType::SPOT_LIGHT)
+			Shader.SetInteger("LightType", 2);
 	}
 }
