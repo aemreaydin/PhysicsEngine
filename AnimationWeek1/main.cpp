@@ -157,27 +157,27 @@ void processInput(GLFWwindow *window)
 
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.x += 0.1f;
+		LightManager->Lights[0].position.x += 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.x -= 0.1f;
+		LightManager->Lights[0].position.x -= 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.z += 0.1f;
+		LightManager->Lights[0].position.z += 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.z -= 0.1f;
+		LightManager->Lights[0].position.z -= 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.y += 0.1f;
+		LightManager->Lights[0].position.y += 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.y -= 0.1f;
+		LightManager->Lights[0].position.y -= 0.01f;
 	}
 
 

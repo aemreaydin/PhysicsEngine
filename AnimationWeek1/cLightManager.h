@@ -28,8 +28,13 @@ struct sLight
 	glm::vec4 ambient;
 	glm::vec4 diffuse;
 	glm::vec4 specular;
+
 	glm::vec3 attenuation;
+
 	glm::vec3 position;
+	glm::vec3 direction;
+	float cutoff;
+	
 	eLightType lightType;
 
 	sLight()
@@ -39,6 +44,8 @@ struct sLight
 		this->specular = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 		this->attenuation = glm::vec3(1.0f, 0.35f, 0.2f);
 		this->position = glm::vec3(0.0f);
+		this->direction = glm::vec3(0.0f);
+		float cutoff = 0.0f;
 		this->lightType = eLightType::UNKNOWN;
 	}
 };
