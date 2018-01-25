@@ -66,7 +66,8 @@ void cLightManager::CreateLights()
 		lightFile >> tempLight.direction.z;
 
 		lightFile >> temp;
-		lightFile >> tempLight.cutoff;
+		lightFile >> tempLight.cutoff.x;
+		lightFile >> tempLight.cutoff.y;
 
 		this->Lights.push_back(tempLight);
 	}
@@ -166,7 +167,8 @@ void cLightManager::LoadLightsIntoShader(cShader Shader)
 		Shader.SetVector4f("SpecularColor", this->Lights[i].specular, true);
 		Shader.SetVector3f("Attenuation", this->Lights[i].attenuation, true);
 		Shader.SetVector3f("LightDirection", this->Lights[i].direction, true);
-		Shader.SetFloat("Cutoff", glm::radians(this->Lights[i].cutoff), true);
+		Shader.SetVector2f("Cutoff", glm::radians(this->Lights[i].cutoff), true);
+
 
 		if (this->Lights[i].lightType == eLightType::DIRECTIONAL_LIGHT)
 			Shader.SetInteger("LightType", 0);

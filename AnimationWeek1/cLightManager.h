@@ -4,6 +4,7 @@
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
 
+#include <glm\vec2.hpp>
 #include <glm\vec3.hpp>
 #include <glm\vec4.hpp>
 #include <glm\mat4x4.hpp>
@@ -33,7 +34,7 @@ struct sLight
 
 	glm::vec3 position;
 	glm::vec3 direction;
-	float cutoff;
+	glm::vec2 cutoff;
 	
 	eLightType lightType;
 
@@ -45,7 +46,7 @@ struct sLight
 		this->attenuation = glm::vec3(1.0f, 0.35f, 0.2f);
 		this->position = glm::vec3(0.0f);
 		this->direction = glm::vec3(0.0f);
-		float cutoff = 0.0f;
+		this->cutoff = glm::vec2(0.0f);
 		this->lightType = eLightType::UNKNOWN;
 	}
 };

@@ -42,6 +42,8 @@ float lastX = width / 2.0f;
 float lastY = height / 2.0f;
 bool firstMouse = true;
 
+int currentLight = 0;
+
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -157,29 +159,37 @@ void processInput(GLFWwindow *window)
 
 	if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.x += 0.01f;
+		LightManager->Lights[currentLight].position.x += 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.x -= 0.01f;
+		LightManager->Lights[currentLight].position.x -= 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.z += 0.01f;
+		LightManager->Lights[currentLight].position.z += 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.z -= 0.01f;
+		LightManager->Lights[currentLight].position.z -= 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.y += 0.01f;
+		LightManager->Lights[currentLight].position.y += 0.01f;
 	}
 	if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
 	{
-		LightManager->Lights[0].position.y -= 0.01f;
+		LightManager->Lights[currentLight].position.y -= 0.01f;
 	}
 
+	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
+	{
+		if (currentLight == LightManager->NumLights)
+			currentLight = 0;
+		else
+			currentLight++;
+		
+	}
 
 }
 
