@@ -3,12 +3,15 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 #include "cShader.h"
 
+std::string createArrayStringForGLSL(int index, std::string type);
+
 cLightManager::cLightManager()
 {
-
+	this->NumLights = 0;
 }
 
 void cLightManager::CreateLights()
@@ -162,19 +165,30 @@ void cLightManager::LoadLightsIntoShader(cShader Shader)
 {
 	for (int i = 0; i < this->Lights.size(); i++)
 	{
-		Shader.SetVector4f("AmbientColor", this->Lights[i].ambient, true);
-		Shader.SetVector4f("DiffuseColor", this->Lights[i].diffuse, true);
-		Shader.SetVector4f("SpecularColor", this->Lights[i].specular, true);
-		Shader.SetVector3f("Attenuation", this->Lights[i].attenuation, true);
-		Shader.SetVector3f("LightDirection", this->Lights[i].direction, true);
-		Shader.SetVector2f("Cutoff", glm::radians(this->Lights[i].cutoff), true);
-
+		//std::cout << createArrayStringForGLSL(i, "AmbientColor").c_str() << std::endl;
+		Shader.SetVector4f(createArrayStringForGLSL(i, "AmbientColor").c_str(), this->Lights[i].ambient, true);
+		Shader.SetVector4f(createArrayStringForGLSL(i, "DiffuseColor").c_str(), this->Lights[i].diffuse, true);
+		Shader.SetVector4f(createArrayStringForGLSL(i, "SpecularColor").c_str(), this->Lights[i].specular, true);
+		Shader.SetVector3f(createArrayStringForGLSL(i, "Position").c_str(), this->Lights[i].position, true);
+		Shader.SetVector3f(createArrayStringForGLSL(i, "Attenuation").c_str(), this->Lights[i].attenuation, true);
+		Shader.SetVector3f(createArrayStringForGLSL(i, "LightDirection").c_str(), this->Lights[i].direction, true);
+		Shader.SetVector2f(createArrayStringForGLSL(i, "Cutoff").c_str(), glm::radians(this->Lights[i].cutoff), true);
 
 		if (this->Lights[i].lightType == eLightType::DIRECTIONAL_LIGHT)
-			Shader.SetInteger("LightType", 0);
+			Shader.SetInteger(createArrayStringForGLSL(i, "LightType").c_str(), 0);
 		else if (this->Lights[i].lightType == eLightType::POINT_LIGHT)
-			Shader.SetInteger("LightType", 1);
+		{
+			Shader.SetInteger(createArrayStringForGLSL(i, "LightType").c_str(), 1);
+		}
 		else if (this->Lights[i].lightType == eLightType::SPOT_LIGHT)
-			Shader.SetInteger("LightType", 2);
+		{
+			Shader.SetInteger(createArrayStringForGLSL(i, "LightType").c_str(), 2);
+		}
 	}
+	Shader.SetInteger("NumLights", this->NumLights, true);
+}
+std::string createArrayStringForGLSL(int index, std::string type)
+{
+	//std::cout << "Lights[" + std::to_string(index) + std::string("].") + type << std::endl;
+	return ("Lights[" + std::to_string(index) + std::string("].") + type);
 }

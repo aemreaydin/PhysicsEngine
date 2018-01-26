@@ -80,7 +80,7 @@ int main(int argc, char **argv)
 	LightManager = new cLightManager();
 	LightManager->CreateLights();
 	LightManager->LoadLampsIntoShader(*LampShader);
-	
+
 	//LightManager->LoadLampsIntoShader(*Shader);
 
 	GOVec.push_back(Nanosuit);
@@ -184,11 +184,9 @@ void processInput(GLFWwindow *window)
 
 	if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
 	{
+		currentLight++;
 		if (currentLight == LightManager->NumLights)
-			currentLight = 0;
-		else
-			currentLight++;
-		
+			currentLight = 0;		
 	}
 
 }
