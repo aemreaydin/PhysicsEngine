@@ -19,5 +19,4 @@ private:
 	std::string title;
 };
 
-
 #endif

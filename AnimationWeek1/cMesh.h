@@ -7,8 +7,7 @@
 #include <string>
 #include <vector>
 
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
+#include <glm\game_math.h>
 
 #include "cShader.h"
 
@@ -42,6 +41,5 @@ private:
 	unsigned int VAO, VBO, EBO;
 	void setupMesh();
 };
-
 
 #endif

@@ -12,10 +12,8 @@ cMesh::cMesh(std::vector<sVertex> vertices, std::vector<GLuint> indices, std::ve
 	return;
 }
 
-
 cMesh::~cMesh()
 {
-
 	return;
 }
 

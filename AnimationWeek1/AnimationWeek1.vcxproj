@@ -70,11 +70,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SourcePath)include</IncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SourcePath)lib/Debug64</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include;$(SolutionDir)Interfaces;$(SolutionDir)PhysicsEngine;$(SolutionDir)BulletPhysicsEngine;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SourcePath)lib/Debug64;$(OutDir);$(SolutionDir)lib</LibraryPath>
+    <SourcePath>$(VC_SourcePath);$(SolutionDir)Interfaces;$(SolutionDir)PhysicsEngine;$(SolutionDir)BulletPhysicsEngine</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SourcePath)include</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)include;$(SolutionDir)Interfaces;$(SolutionDir)PhysicsEngine;$(SolutionDir)BulletPhysicsEngine;</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SourcePath)lib/Release64;$(OutDir);$(SolutionDir)lib</LibraryPath>
+    <SourcePath>$(VC_SourcePath);$(SolutionDir)include;$(SolutionDir)Interfaces;$(SolutionDir)PhysicsEngine;$(SolutionDir)BulletPhysicsEngine;</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -93,7 +96,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3_64.lib;assimp-vc140-mt.lib;soil2-debug.lib;OpenGL32.lib;gtestd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3_64.lib;assimp-vc140-mt.lib;soil2-debug.lib;OpenGL32.lib;gtestd.lib;PhysicsEngine.lib;BulletPhysicsEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -122,26 +125,38 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3_64.lib;lua5.3.3-static_64.lib;gtest.lib;soil2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cBall.cpp" />
     <ClCompile Include="cGameObject.cpp" />
     <ClCompile Include="cGLCalls.cpp" />
     <ClCompile Include="cLightManager.cpp" />
     <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="cModel.cpp" />
+    <ClCompile Include="cPhysicsScene.cpp" />
+    <ClCompile Include="cPlane.cpp" />
     <ClCompile Include="cShader.cpp" />
+    <ClCompile Include="extern.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="cBall.h" />
     <ClInclude Include="cGameObject.h" />
     <ClInclude Include="cGLCalls.h" />
     <ClInclude Include="cLightManager.h" />
     <ClInclude Include="cMesh.h" />
     <ClInclude Include="cModel.h" />
+    <ClInclude Include="cPhysicsScene.h" />
+    <ClInclude Include="cPlane.h" />
     <ClInclude Include="cShader.h" />
+    <ClInclude Include="extern.h" />
+    <ClInclude Include="src\json.hpp" />
+    <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

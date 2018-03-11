@@ -7,6 +7,7 @@ in vec3 Normal;
 in vec3 ObjectPosition;
 in vec3 LightPosition;
 
+
 // Light Properties
 struct sLight
 {
@@ -31,6 +32,8 @@ uniform sampler2D texture_specular1;
 uniform sampler2D texture_normal1;
 uniform sampler2D texturje_height;
 
+uniform bool isCurrent;
+
 vec3 calcDirectionalLight(sLight light, vec3 normal, vec3 viewDir, vec4 textureCol);
 vec3 calcPointLight(sLight light, vec3 normal, vec3 objPosition, vec3 viewDir, vec4 textureCol);
 vec3 calcSpotLight(sLight light, vec3 normal, vec3 objPosition, vec3 viewDir, vec4 textureCol);
@@ -43,7 +46,7 @@ void main()
 	vec4 textureColor = (texture(texture_diffuse1, TexCoords));
 						//+ texture(texture_specular1, TexCoords));
 						//+ texture(texture_normal1, TexCoords));
-						
+					
 	vec3 result = vec3(0.0, 0.0, 0.0);
 	for(int i = 0; i < NumLights; i++)
 	{
@@ -52,9 +55,15 @@ void main()
 		else if(Lights[i].LightType == 1)
 			result += calcPointLight(Lights[i], norm, ObjectPosition, viewDir, textureColor);
 		else if(Lights[i].LightType == 2)
-			result += calcSpotLight(Lights[i], norm, ObjectPosition, viewDir, textureColor);
+		result += calcSpotLight(Lights[i], norm, ObjectPosition, viewDir, textureColor);
+	}				
+	
+	if(!isCurrent)
+	{	
+		FragColor = vec4(result, 1.0);
 	}
-	FragColor = vec4(result, 1.0);
+	else
+		FragColor = vec4(result, 1.0) + vec4(0.0, 0.2, 0.9, 1.0);
 }
 
 
@@ -65,7 +74,7 @@ vec3 calcDirectionalLight(sLight light, vec3 normal, vec3 viewDir, vec4 textureC
 	float diffuseRatio = max(dot(normal, lightDir), 0.0);
 	float specularRatio = pow(max(dot(viewDir, reflect(-lightDir, normal)), 0.0), 64);
 	
-	vec3 ambient = 0.2 * light.AmbientColor.xyz * vec3(texture(texture_diffuse1, TexCoords));// * vec3(textureCol);
+	vec3 ambient = 0.1 * light.AmbientColor.xyz * vec3(texture(texture_diffuse1, TexCoords));// * vec3(textureCol);
 	vec3 diffuse = light.DiffuseColor.xyz * diffuseRatio* vec3(texture(texture_diffuse1, TexCoords));// * diffuseRatio * vec3(textureCol);
 	vec3 specular = light.SpecularColor.xyz * specularRatio * vec3(texture(texture_diffuse1, TexCoords));// * specularRatio * vec3(textureCol);
 	

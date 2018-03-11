@@ -4,23 +4,18 @@
 #include <glad\glad.h>
 #include <GLFW\glfw3.h>
 
-#include <glm\vec2.hpp>
-#include <glm\vec3.hpp>
-#include <glm\vec4.hpp>
-#include <glm\mat4x4.hpp>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm\game_math.h>
 
 #include <vector>
 
 class cShader;
 
-
 enum eLightType
 {
 	DIRECTIONAL_LIGHT,
 	POINT_LIGHT,
-	SPOT_LIGHT,	
+	SPOT_LIGHT,
 	UNKNOWN
 };
 
@@ -35,7 +30,7 @@ struct sLight
 	glm::vec3 position;
 	glm::vec3 direction;
 	glm::vec2 cutoff;
-	
+
 	eLightType lightType;
 
 	sLight()
@@ -61,7 +56,6 @@ struct sLightVAO
 		this->lightVBO = 0;
 	}
 };
-
 
 class cLightManager
 {

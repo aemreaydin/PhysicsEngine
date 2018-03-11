@@ -94,7 +94,7 @@ cMesh cModel::processMesh(aiMesh * mesh, const aiScene * scene)
 			vertex.Tangent = glm::vec3(0.0f);
 			vertex.BiTangent = glm::vec3(0.0f);
 		}
-	
+
 		vertices.push_back(vertex);
 	}
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
@@ -127,7 +127,7 @@ std::vector<sTexture> cModel::loadMaterialTextures(aiMaterial * mat, aiTextureTy
 {
 	std::vector<sTexture> textures;
 
-	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++) 
+	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
 		mat->GetTexture(type, i, &str);

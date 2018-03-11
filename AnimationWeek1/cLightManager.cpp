@@ -18,7 +18,6 @@ void cLightManager::CreateLights()
 {
 	std::ifstream lightFile("assets/lighting/Lights.txt");
 	std::string temp;
-	
 
 	lightFile >> this->NumLights;
 	for (int i = 0; i < this->NumLights; i++)
@@ -74,7 +73,6 @@ void cLightManager::CreateLights()
 
 		this->Lights.push_back(tempLight);
 	}
-
 }
 
 void cLightManager::LoadLampsIntoShader(cShader Shader)
@@ -135,7 +133,7 @@ void cLightManager::LoadLampsIntoShader(cShader Shader)
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 		glBindVertexArray(lightVAO);
-		
+
 		GLuint posLoc = glGetAttribLocation(Shader.ID, "lightPosition");
 		glEnableVertexAttribArray(posLoc);
 		glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);

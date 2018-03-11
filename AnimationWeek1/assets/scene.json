@@ -1,0 +1,79 @@
+{
+	"Ball": {
+		"objectName": "Ball",
+		"objectType": "Sphere",
+		"objectModel": "assets/models/Ball/NBA BASKETBALL.obj",
+		"numObjects": 15,
+		"positionMin": -80,
+		"positionMax": 80,
+		"positionyMin": 30,
+		"positionyMax": 80,
+		"rotationMin": 0,
+		"rotationMax": 360,
+		"scaleMin": 5,
+		"scaleMax": 15,
+		"velocityMin": 0,
+		"velocityMax": 10,
+		"Mass": 1
+	},
+	"PlaneFloor" : 
+	{
+		"objectModel": "assets/models/Plane/pFloor.obj",
+		"position": 0.0,
+		"rotation": 0.0,
+		"scale": 1.0,
+		"normalx": 0.0,
+		"normaly": 1.0,
+		"normalz": 0.0,
+		"planeConstant": 1.0,
+		"mass": 0.0
+	},
+	"PlaneRight" : 
+	{
+		"objectModel": "assets/models/Plane/pRight.obj",
+		"position": 0.0,
+		"rotation": 0.0,
+		"scale": 1.0,
+		"normalx": 0.0,
+		"normaly": 0.0,
+		"normalz": -1.0,
+		"planeConstant": -99.0,
+		"mass": 0.0
+	},
+	"PlaneLeft" : 
+	{
+		"objectModel": "assets/models/Plane/pLeft.obj",
+		"position": 0.0,
+		"rotation": 0.0,
+		"scale": 1.0,
+		"normalx": 0.0,
+		"normaly": 0.0,
+		"normalz": 1.0,
+		"planeConstant": -99.0,
+		"mass": 0.0
+	},
+	"PlaneFront" : 
+	{
+		"objectModel": "assets/models/Plane/pFront.obj",
+		"position": 0.0,
+		"rotation": 0.0,
+		"scale": 1.0,
+		"normalx": -1.0,
+		"normaly": 0.0,
+		"normalz": 0.0,
+		"planeConstant": -99.0,
+		"mass": 0.0
+	},
+	"PlaneBack" : 
+	{
+		"objectModel": "assets/models/Plane/pBack.obj",
+		"position": 0.0,
+		"rotation": 0.0,
+		"scale": 1.0,
+		"normalx": 1.0,
+		"normaly": 0.0,
+		"normalz": 0.0,
+		"planeConstant": -99.0,
+		"mass": 0.0
+	}
+}
